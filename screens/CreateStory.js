@@ -90,28 +90,28 @@ export default class Feed extends Component {
                                         fontSize: 15,
                                         color: "red"
                                       }}
-                                   // placeholder="fucking work"
+                                    placeholder="Select your image"
                                     placeholderStyle={{
                                         color: "red",
                                         fontWeight: "bold"
                                       }}
                                     defaultValue={this.state.previewImage}
                                     containerStyle={{
-                                        // height: 40,
-                                        // borderRadius: 20,
-                                        // marginBottom: 10
+                                         height: 40,
+                                         borderRadius: 20,
+                                         marginBottom: 10
                                     }}
-                                   // style={{ backgroundColor: "white" }}
+                                    style={{ backgroundColor: "white" }}
                                     itemStyle={{ justifyContent: "flex-start" }}
                                     dropDownStyle={{ backgroundColor: "#2f345d" }}
                                     labelStyle={{
-                                        // color: "white",
-                                        // fontFamily: "Bubblegum-Sans"
+                                         color: "white",
+                                         fontFamily: "Bubblegum-Sans",
                                         fontWeight: "bold"
                                     }}
                                     arrowStyle={{
-                                        // color: "white",
-                                        // fontFamily: "Bubblegum-Sans"
+                                         color: "white",
+                                         fontFamily: "Bubblegum-Sans"
                                     }}
                                     onOpen={() => {
                                         this.setState({ dropdownHeight: 200 });

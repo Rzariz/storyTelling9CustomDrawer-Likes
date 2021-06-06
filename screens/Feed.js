@@ -9,7 +9,7 @@ import {
     Image
 } from 'react-native';
 import { RFValue } from "react-native-responsive-fontsize";
-import {FlatList} from 'react-native-gesture-handler'
+import { FlatList } from 'react-native-gesture-handler'
 import StoryCard from './StoryCard'
 
 import AppLoading from "expo-app-loading";
@@ -32,8 +32,8 @@ export default class Feed extends Component {
     componentDidMount() {
         this.loadFontAsync();
     }
-    renderItem = ({ item : mystory}) =>{
-        return <StoryCard story = {mystory}/>
+    renderItem = ({ item: mystory }) => {
+        return <StoryCard story={mystory} navigation={this.props.navigation} />
     }
     keyExtractor = (item, index) => index.toString();
     render() {
@@ -54,11 +54,11 @@ export default class Feed extends Component {
                             <Text style={styles.appTitleText}> Storytelling App </Text>
                         </View>
                     </View>
-                    <View style = {styles.cardContainer}>
+                    <View style={styles.cardContainer}>
                         <FlatList
-                        data = {stories}
-                        keyExtractor = {this.keyExtractor}
-                        renderItem = { this.renderItem}
+                            data={stories}
+                            keyExtractor={this.keyExtractor}
+                            renderItem={this.renderItem}
                         />
                     </View>
 
