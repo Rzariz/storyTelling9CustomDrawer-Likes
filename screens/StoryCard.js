@@ -7,13 +7,14 @@ import {
     StatusBar,
     Image,
     Dimensions,
-    SafeAreaView
+    SafeAreaView,
+    TouchableOpacity
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { RFValue } from "react-native-responsive-fontsize";
 import AppLoading from "expo-app-loading";
 import * as Font from "expo-font";
-import { TouchableOpacity } from "react-native-gesture-handler";
+//import { TouchableOpacity } from "react-native-gesture-handler";
 
 let customFonts = {
     "Bubblegum-Sans": require("../assets/fonts/BubblegumSans-Regular.ttf")
