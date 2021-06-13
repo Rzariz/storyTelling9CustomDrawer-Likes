@@ -16,7 +16,7 @@ export default class Logout extends Component {
                     justifyContent: "center",
                     alignItems: "center"
                 }}>
-                <Text>Profile</Text>
+                <Text> Logout </Text>
             </View>
         )
     }
