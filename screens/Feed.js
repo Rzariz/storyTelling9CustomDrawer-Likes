@@ -15,13 +15,16 @@ import StoryCard from './StoryCard'
 import AppLoading from "expo-app-loading";
 import * as Font from "expo-font";
 
+import firebase from 'firebase';
+
 let customFonts = { 'Bubblegum-Sans': require("../assets/fonts/BubblegumSans-Regular.ttf") }
 let stories = require("./temp_stories.json");
 export default class Feed extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            fontsLoaded: false
+            fontsLoaded: false,
+            light_theme : true
         }
     }
     async loadFontAsync() {
@@ -31,7 +34,21 @@ export default class Feed extends Component {
 
     componentDidMount() {
         this.loadFontAsync();
+        this.fetchUser();
     }
+    async fetchUser() {
+        let theme;
+        await firebase
+          .database()
+          .ref("/users/" + firebase.auth().currentUser.uid)
+          .on("value", (snapshot) =>{
+            theme = snapshot.val().current_theme;
+            this.setState({ light_theme: theme === "light" });
+          });
+       
+      }
+
+
     renderItem = ({ item: mystory }) => {
         return <StoryCard story={mystory} navigation={this.props.navigation} />
     }
@@ -43,7 +60,7 @@ export default class Feed extends Component {
         }
         else {
             return (
-                <View style={styles.container}>
+                <View style={ this.state.light_theme ? styles.containerLight : styles.container}>
                     <SafeAreaView style={styles.droidSafeArea} />
                     <View style={styles.appTitle}>
                         <View style={styles.appIcon}>
@@ -51,7 +68,7 @@ export default class Feed extends Component {
                                 source={require("../assets/logo.png")} style={styles.iconImage}></Image>
                         </View>
                         <View style={styles.appTitleTextContainer}>
-                            <Text style={styles.appTitleText}> Storytelling App </Text>
+                            <Text style={ this.state.light_theme ? styles.appTitleTextLight : styles.appTitleText}>Storytelling App</Text>
                         </View>
                     </View>
                     <View style={styles.cardContainer}>
@@ -74,6 +91,10 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#15193c"
     },
+    containerLight: {
+        flex: 1,
+        backgroundColor: "white"
+      },
     droidSafeArea: {
         marginTop: Platform.OS === "android" ? StatusBar.currentHeight : RFValue(35)
     },
@@ -100,6 +121,11 @@ const styles = StyleSheet.create({
         fontSize: RFValue(28),
         fontFamily: "Bubblegum-Sans"
     },
+    appTitleTextLight: {
+        color: "black",
+        fontSize: RFValue(28),
+        fontFamily: "Bubblegum-Sans"
+      },
     cardContainer: {
         flex: 0.93
     }
