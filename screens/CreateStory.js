@@ -8,7 +8,9 @@ import {
     StatusBar,
     Image,
     ScrollView,
-    TextInput
+    TextInput,
+    Button,
+    Alert
 } from 'react-native';
 import { RFValue } from "react-native-responsive-fontsize";
 //import { ScrollView } from 'react-native-gesture-handler'
@@ -48,6 +50,42 @@ export default class Feed extends Component {
     componentDidMount() {
         this.loadFontAsync();
         this.fetchUser();
+    }
+    async addStory() {
+        console.log("Test")
+        if (this.state.title &&
+            this.state.description &&
+            this.state.story &&
+            this.state.moral) {
+
+            let storyData = {
+                preview_image: this.state.previewImage,
+                title: this.state.title,
+                description: this.state.description,
+                story: this.state.story,
+                moral: this.state.moral,
+                author: firebase.auth().currentUser.displayName,
+                created_on: new Date(),
+                author_uid: firebase.auth().currentUser.uid,
+                likes: 0
+            }
+            await firebase
+                .database()
+                .ref(
+                    "/posts/" + Math.random().toString(36).slice(2)
+                )
+                .set(storyData)
+                .then(function (snapshot) { });
+                this.props.setUpdateToTrue();
+            this.props.navigation.navigate("Feed");
+        }
+        else {
+            Alert.alert(
+                "Error", "All fields are required!",
+                [{ text: "OK", onPress: () => console.log("OK Pressed") }],
+                { cancelable: false }
+            );
+        }
     }
     render() {
         if (!this.state.fontsLoaded) {
@@ -117,58 +155,66 @@ export default class Feed extends Component {
                                     style={{ backgroundColor: "white" }}
                                     itemStyle={{ justifyContent: "flex-start" }}
                                     dropDownStyle={{ backgroundColor: this.state.light_theme ? "#eee" : '#2f345d' }}
-                                    labelStyle= {this.state.light_theme ? styles.dropdownLabelLight : styles.dropdownLabel}
-                                arrowStyle = {this.state.light_theme ? styles.dropdownLabelLight : styles.dropdownLabel}
-                                onOpen={() => {
-                                    this.setState({ dropdownHeight: 200 });
-                                }}
-                                onClose={() => {
-                                    this.setState({ dropdownHeight: 40 });
-                                }}
-                                onChangeItem={item =>
-                                    this.setState({ previewImage: item.value })} />
+                                    labelStyle={this.state.light_theme ? styles.dropdownLabelLight : styles.dropdownLabel}
+                                    arrowStyle={this.state.light_theme ? styles.dropdownLabelLight : styles.dropdownLabel}
+                                    onOpen={() => {
+                                        this.setState({ dropdownHeight: 200 });
+                                    }}
+                                    onClose={() => {
+                                        this.setState({ dropdownHeight: 40 });
+                                    }}
+                                    onChangeItem={item =>
+                                        this.setState({ previewImage: item.value })} />
                             </View>
 
 
-                            <TextInput style = { this.state.light_theme ? styles.inputFontLight : styles.inputFont}
+                            <TextInput style={this.state.light_theme ? styles.inputFontLight : styles.inputFont}
                                 onChangeText={title => this.setState({ title })}
                                 placeholder={"Title"}
-                                placeholderTextColor = { this.state.light_theme ? "black" : "white" } />
+                                placeholderTextColor={this.state.light_theme ? "black" : "white"} />
                             <TextInput
-                                style={[ this.state.light_theme ? styles.inputFontLight : styles.inputFont,
-                                    styles.inputFontExtra,
-                                    styles.inputTextBig
+                                style={[this.state.light_theme ? styles.inputFontLight : styles.inputFont,
+                                styles.inputFontExtra,
+                                styles.inputTextBig
                                 ]}
                                 onChangeText={description => this.setState({ description })}
                                 placeholder={"Description"}
                                 multiline={true}
                                 numberOfLines={4}
-                                placeholderTextColor = { this.state.light_theme ? "black" : "white" } 
+                                placeholderTextColor={this.state.light_theme ? "black" : "white"}
                             />
                             <TextInput
-                                 style={[ this.state.light_theme ? styles.inputFontLight : styles.inputFont,
-                                    styles.inputFontExtra,
-                                    styles.inputTextBig
+                                style={[this.state.light_theme ? styles.inputFontLight : styles.inputFont,
+                                styles.inputFontExtra,
+                                styles.inputTextBig
                                 ]}
                                 onChangeText={story => this.setState({ story })}
                                 placeholder={"Story"}
                                 multiline={true}
                                 numberOfLines={20}
-                                placeholderTextColor = { this.state.light_theme ? "black" : "white" } 
+                                placeholderTextColor={this.state.light_theme ? "black" : "white"}
                             />
 
                             <TextInput
-                                style={[ this.state.light_theme ? styles.inputFontLight : styles.inputFont,
-                                    styles.inputFontExtra,
-                                    styles.inputTextBig
+                                style={[this.state.light_theme ? styles.inputFontLight : styles.inputFont,
+                                styles.inputFontExtra,
+                                styles.inputTextBig
                                 ]}
                                 onChangeText={moral => this.setState({ moral })}
                                 placeholder={"Moral of the story"}
                                 multiline={true}
                                 numberOfLines={4}
-                                placeholderTextColor = { this.state.light_theme ? "black" : "white" }
+                                placeholderTextColor={this.state.light_theme ? "black" : "white"}
                             />
+
                         </ScrollView>
+                        <View style={styles.submitButton}>
+                            <Button
+                                onPress={() => this.addStory()}
+                                title="Submit"
+                                color="#841584"
+                            />
+                        </View>
 
                     </View>
                     <View style={{ flex: 0.08 }} />
@@ -244,7 +290,7 @@ const styles = StyleSheet.create({
         borderWidth: RFValue(1),
         borderRadius: RFValue(10),
         paddingLeft: RFValue(10),
-        color: "white",
+        color: "black",
         fontFamily: "Bubblegum-Sans"
     },
     inputFontExtra: {
@@ -253,5 +299,10 @@ const styles = StyleSheet.create({
     inputTextBig: {
         textAlignVertical: "top",
         padding: RFValue(5)
+    },
+    submitButton: {
+        marginTop: RFValue(20),
+        alignItems: "center",
+        justifyContent: "center"
     }
 })

@@ -15,10 +15,24 @@ export default class BottomTabNavigator extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            light_theme: true
+            light_theme: true,
+            isUpdated: false
         };
     }
+    renderFeed = props => {
+        return <Feed setUpdateToFalse={this.removeUpdated} {...props} />;
+    };
 
+    renderStory = props => {
+        return <CreateStory setUpdateToTrue={this.changeUpdated} {...props} />;
+    };
+    changeUpdated = () => {
+        this.setState({ isUpdated: true });
+    };
+
+    removeUpdated = () => {
+        this.setState({ isUpdated: false });
+    };
     componentDidMount() {
 
         this.fetchUser();
@@ -39,7 +53,7 @@ export default class BottomTabNavigator extends Component {
         return (
             <Tab.Navigator
                 labeled={false}
-                barStyle={ this.state.light_theme ? styles.bottomTabStyleLight : styles.bottomTabStyle}
+                barStyle={this.state.light_theme ? styles.bottomTabStyleLight : styles.bottomTabStyle}
                 screenOptions={({ route }) => ({
                     tabBarIcon: ({ focused, color, size }) => {
                         let iconName;
@@ -58,8 +72,8 @@ export default class BottomTabNavigator extends Component {
                     inactiveTintColor: 'gray',
                 }}
             >
-                <Tab.Screen name="Feed" component={Feed} />
-                <Tab.Screen name="CreateStory" component={CreateStory} />
+                <Tab.Screen name="Feed" component={this.renderFeed}  options={{ unmountOnBlur: true }}/>
+                <Tab.Screen name="CreateStory" component={this.renderStory} options={{ unmountOnBlur: true }}/>
             </Tab.Navigator >
         );
     }

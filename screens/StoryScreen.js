@@ -31,7 +31,7 @@ export default class StoryCard extends Component {
             fontsLoaded: false,
             speakerColor: "gray",
             speakerIcon: "volume-high-outline",
-            light_theme : true
+            light_theme: true
         };
     }
     async fetchUser() {
@@ -54,26 +54,27 @@ export default class StoryCard extends Component {
         this.loadFontsAsync();
         this.fetchUser();
     }
-    async initiateTTS(title , author, story, moral){
+    async initiateTTS(title, author, story, moral) {
         const currColor = this.state.speakerColor;
         this.setState({
-            speakerColor : currColor === "gray" ? 'red' : "gray"
+            speakerColor: currColor === "gray" ? 'red' : "gray"
         })
-        if(currColor === "gray"){
-           Speech.speak( `${title} by ${author}`);
-           Speech.speak(story);
+        if (currColor === "gray") {
+            Speech.speak(`${title} by ${author}`);
+            Speech.speak(story);
             Speech.speak("The moral of the story is !");
             Speech.speak(moral);
         }
-        else{
+        else {
             Speech.stop();
         }
     }
     render() {
         console.log(this.props.route.param)
+        //let story = this.state.story_data;
         if (!this.props.route.params) {
             this.props.navigation.navigate("Home");
-          } 
+        }
 
         else if (!this.state.fontsLoaded) {
             return <AppLoading />
@@ -131,7 +132,7 @@ export default class StoryCard extends Component {
 
 
                             <View style={styles.storyTextContainer}>
-                                <Text  style={this.state.light_theme ? styles.storyTextLight : styles.storyText}>
+                                <Text style={this.state.light_theme ? styles.storyTextLight : styles.storyText}>
                                     {this.props.route.params.story.story}
                                 </Text>
                                 <Text style={this.state.light_theme ? styles.moralTextLight : styles.moralText}>
@@ -141,7 +142,7 @@ export default class StoryCard extends Component {
                             <View style={styles.actionContainer}>
                                 <View style={styles.likeButton}>
                                     <Ionicons name={"heart"} size={RFValue(30)} color={this.state.light_theme ? "black" : "white"} />
-                                    <Text style={ this.state.light_theme ?  styles.likeTextLight : styles.likeText}>12k</Text>
+                                    <Text style={this.state.light_theme ? styles.likeTextLight : styles.likeText}>12k</Text>
                                 </View>
                             </View>
                         </ScrollView>
@@ -208,7 +209,7 @@ const styles = StyleSheet.create({
         margin: RFValue(20),
         backgroundColor: "white",
         borderRadius: RFValue(20),
-        borderWidth : 2
+        borderWidth: 2
     },
     image: {
         width: "100%",
@@ -251,7 +252,7 @@ const styles = StyleSheet.create({
     storyTextContainer: {
         padding: RFValue(20)
     },
-    
+
     storyText: {
         fontFamily: "Bubblegum-Sans",
         fontSize: RFValue(15),
@@ -293,7 +294,7 @@ const styles = StyleSheet.create({
         marginLeft: RFValue(5)
     },
     likeTextLight: {
-       //color: "black",
+        //color: "black",
         fontFamily: "Bubblegum-Sans",
         fontSize: RFValue(25),
         marginLeft: RFValue(5)
