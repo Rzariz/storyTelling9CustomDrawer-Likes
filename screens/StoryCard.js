@@ -28,7 +28,9 @@ export default class StoryCard extends Component {
             fontsLoaded: false,
             light_theme: true,
             story_id: this.props.story.key,
-            story_data: this.props.story.value
+            story_data: this.props.story.value,
+            is_liked: false,
+            likes: this.props.story.value.likes
         };
     }
 
@@ -52,6 +54,25 @@ export default class StoryCard extends Component {
             });
 
     }
+    likeAction = () => {
+        if (this.state.is_liked) {
+            firebase
+                .database()
+                .ref("posts")
+                .child(this.state.story_id)
+                .child("likes")
+                .set(firebase.database.ServerValue.increment(-1));
+            this.setState({ likes: (this.state.likes -= 1), is_liked: false });
+        } else {
+            firebase
+                .database()
+                .ref("posts")
+                .child(this.state.story_id)
+                .child("likes")
+                .set(firebase.database.ServerValue.increment(1));
+            this.setState({ likes: (this.state.likes += 1), is_liked: true });
+        }
+    };
     render() {
         let story = this.state.story_data;
         if (!this.state.fontsLoaded) {
@@ -69,7 +90,7 @@ export default class StoryCard extends Component {
                 <TouchableOpacity style={styles.container}
                     onPress={() =>
                         this.props.navigation.navigate("StoryScreen",
-                            { story: story } ) }>
+                            { story: story })}>
                     <SafeAreaView style={styles.droidSafeArea} />
                     <View style={this.state.light_theme ? styles.cardContainerLight : styles.cardContainer}>
                         <Image
@@ -80,22 +101,30 @@ export default class StoryCard extends Component {
                                 {story.title}
                             </Text>
                             <Text style={this.state.light_theme ? styles.storyAuthorTextLight : styles.storyAuthorText}>
-                               By {story.author}
+                                By {story.author}
                             </Text>
                             <Text style={this.state.light_theme ? styles.descriptionTextLight : styles.descriptionText}>
-                               {story.description}
+                                {story.description}
                             </Text>
                             <Text style={this.state.light_theme ? styles.descriptionTextLight : styles.descriptionText}>
-                               Date : {story.created_on}
+                                Date : {story.created_on}
                             </Text>
 
                         </View>
 
                         <View style={styles.actionContainer}>
-                            <View style={styles.likeButton}>
+                            <TouchableOpacity
+                                onPress={() => this.likeAction()}
+                                style={
+                                    this.state.is_liked
+                                        ? styles.likeButtonLiked
+                                        : styles.likeButtonDisliked
+                                }>
+
                                 <Ionicons name={"heart"} size={RFValue(30)} color={this.state.light_theme ? "black" : "white"} />
-                                <Text style={this.state.light_theme ? styles.likeTextLight : styles.likeText}>12k</Text>
-                            </View>
+                                <Text style={this.state.light_theme ? styles.likeTextLight : styles.likeText}> {this.state.likes} </Text>
+
+                            </TouchableOpacity>
                         </View>
                     </View>
 
@@ -117,7 +146,8 @@ const styles = StyleSheet.create({
     cardContainer: {
         margin: RFValue(13),
         backgroundColor: "#2f345d",
-        borderRadius: RFValue(20)
+        borderRadius: RFValue(20),
+        //borderWidth : 2
     },
     storyImage: {
         resizeMode: "contain",
@@ -186,5 +216,24 @@ const styles = StyleSheet.create({
         fontFamily: "Bubblegum-Sans",
         fontSize: RFValue(25),
         marginLeft: RFValue(5)
+    },
+    likeButtonLiked: {
+        width: RFValue(160),
+        height: RFValue(40),
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "row",
+        backgroundColor: "#eb3948",
+        borderRadius: RFValue(30)
+    },
+    likeButtonDisliked: {
+        width: RFValue(160),
+        height: RFValue(40),
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "row",
+        borderColor: "#eb3948",
+        borderWidth: 2,
+        borderRadius: RFValue(30)
     },
 });

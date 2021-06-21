@@ -162,7 +162,8 @@ const styles = StyleSheet.create({
         fontFamily: "Bubblegum-Sans"
     },
     cardContainer: {
-        flex: 0.93
+        flex: 0.93,
+       
     },
     noStories: {
         flex: 0.85,

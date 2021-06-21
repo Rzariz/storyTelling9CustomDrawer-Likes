@@ -31,7 +31,9 @@ export default class StoryCard extends Component {
             fontsLoaded: false,
             speakerColor: "gray",
             speakerIcon: "volume-high-outline",
-            light_theme: true
+            light_theme: true,
+            likes: this.props.route.params.story.story.likes,
+            is_liked: false
         };
     }
     async fetchUser() {
@@ -69,6 +71,29 @@ export default class StoryCard extends Component {
             Speech.stop();
         }
     }
+
+    likeAction = () => {
+        console.log("here");
+        if (this.state.is_liked) {
+            firebase
+                .database()
+                .ref("posts")
+                .child(this.props.route.params.story_id)
+                .child("likes")
+                .set(firebase.database.ServerValue.increment(-1));
+            this.setState({ likes: (this.state.likes -= 1), is_liked: false });
+        } else {
+            firebase
+                .database()
+                .ref("posts")
+                .child(this.props.route.params.story_id)
+                .child("likes")
+                .set(firebase.database.ServerValue.increment(1));
+            this.setState({ likes: (this.state.likes += 1), is_liked: true });
+        }
+    };
+
+
     render() {
         console.log(this.props.route.param)
         //let story = this.state.story_data;
@@ -110,7 +135,7 @@ export default class StoryCard extends Component {
                                         {this.props.route.params.story.title}
                                     </Text>
                                     <Text style={this.state.light_theme ? styles.storyAuthorTextLight : styles.storyAuthorText}>
-                                       By : {this.props.route.params.story.author}
+                                        By : {this.props.route.params.story.author}
                                     </Text>
                                     <Text style={this.state.light_theme ? styles.descriptionTextLight : styles.descriptionText}>
                                         Date : {this.props.route.params.story.created_on}
@@ -140,17 +165,28 @@ export default class StoryCard extends Component {
 
                             <View style={styles.storyTextContainer}>
                                 <Text style={this.state.light_theme ? styles.storyTextLight : styles.storyText}>
-                                    {this.props.route.params.story.story +'\n'}
+                                    {this.props.route.params.story.story + '\n'}
                                 </Text>
                                 <Text style={this.state.light_theme ? styles.moralTextLight : styles.moralText}>
                                     Moral - {this.props.route.params.story.moral}
                                 </Text>
                             </View>
+
+
                             <View style={styles.actionContainer}>
-                                <View style={styles.likeButton}>
-                                    <Ionicons name={"heart"} size={RFValue(30)} color={this.state.light_theme ? "black" : "white"} />
-                                    <Text style={this.state.light_theme ? styles.likeTextLight : styles.likeText}>12k</Text>
-                                </View>
+                                <TouchableOpacity
+                                    onPress={() => this.likeAction()}
+                                    style={
+                                        this.state.is_liked
+                                            ? styles.likeButtonLiked
+                                            : styles.likeButtonDisliked
+                                    }>
+                                    
+                                        <Ionicons name={"heart"} size={RFValue(30)} color={this.state.light_theme ? "black" : "white"} />
+                                        <Text style={this.state.light_theme ? styles.likeTextLight : styles.likeText}>  {this.state.likes} </Text>
+                                    
+
+                                </TouchableOpacity>
                             </View>
                         </ScrollView>
                     </View>
@@ -317,5 +353,24 @@ const styles = StyleSheet.create({
         fontSize: 13,
         color: "black",
         paddingTop: RFValue(10)
+    },
+    likeButtonLiked: {
+        flexDirection: "row",
+        width: RFValue(160),
+        height: RFValue(40),
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#eb3948",
+        borderRadius: RFValue(30)
+    },
+    likeButtonDisliked: {
+        flexDirection: "row",
+        width: RFValue(160),
+        height: RFValue(40),
+        justifyContent: "center",
+        alignItems: "center",
+        borderColor: "#eb3948",
+        borderRadius: RFValue(30),
+        borderWidth: 2
     },
 });

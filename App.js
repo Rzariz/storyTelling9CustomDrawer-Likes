@@ -13,7 +13,6 @@ const AppSwitchNavigator = createSwitchNavigator({
   DashboardScreen: DashboardScreen
 })
 
-
 const AppNavigator = createAppContainer(AppSwitchNavigator)
 
 export default function App() {
