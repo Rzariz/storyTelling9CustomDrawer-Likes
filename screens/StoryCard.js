@@ -59,8 +59,8 @@ export default class StoryCard extends Component {
         } else {
 
             let images = {
-                'image_1': require("../assets/story_image_2.png"),
-                'image_2': require("../assets/story_image_1.png"),
+                'image_1': require("../assets/story_image_1.png"),
+                'image_2': require("../assets/story_image_2.png"),
                 'image_3': require("../assets/story_image_3.png"),
                 'image_4': require("../assets/story_image_4.png"),
                 'image_5': require("../assets/story_image_5.png"),
@@ -80,10 +80,13 @@ export default class StoryCard extends Component {
                                 {story.title}
                             </Text>
                             <Text style={this.state.light_theme ? styles.storyAuthorTextLight : styles.storyAuthorText}>
-                                {story.author}
+                               By {story.author}
                             </Text>
                             <Text style={this.state.light_theme ? styles.descriptionTextLight : styles.descriptionText}>
-                                {story.description}
+                               {story.description}
+                            </Text>
+                            <Text style={this.state.light_theme ? styles.descriptionTextLight : styles.descriptionText}>
+                               Date : {story.created_on}
                             </Text>
 
                         </View>
@@ -144,7 +147,7 @@ const styles = StyleSheet.create({
     storyAuthorTextLight: {
         fontSize: RFValue(18),
         fontFamily: "Bubblegum-Sans",
-        color: "black"
+        color: "darkblue"
     },
     descriptionText: {
         fontFamily: "Bubblegum-Sans",

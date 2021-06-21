@@ -57,6 +57,12 @@ export default class Feed extends Component {
             this.state.description &&
             this.state.story &&
             this.state.moral) {
+            var today = new Date();
+            var dd = String(today.getDate());
+            var mm = String(today.getMonth() + 1);//January is 0!
+            var yyyy = today.getFullYear();
+
+            today = dd + '/' + mm + '/' + yyyy;
 
             let storyData = {
                 preview_image: this.state.previewImage,
@@ -65,8 +71,9 @@ export default class Feed extends Component {
                 story: this.state.story,
                 moral: this.state.moral,
                 author: firebase.auth().currentUser.displayName,
-                created_on: new Date(),
+                created_on: today,
                 author_uid: firebase.auth().currentUser.uid,
+                //author_uid: "P1F4tAMjoIPmoOvC54PhUBIVKmq1",
                 likes: 0
             }
             await firebase
@@ -76,12 +83,12 @@ export default class Feed extends Component {
                 )
                 .set(storyData)
                 .then(function (snapshot) { });
-                this.props.setUpdateToTrue();
+            this.props.setUpdateToTrue();
             this.props.navigation.navigate("Feed");
         }
         else {
             Alert.alert(
-                "Error", "All fields are required!",
+                "Error", "All fields are required !!!",
                 [{ text: "OK", onPress: () => console.log("OK Pressed") }],
                 { cancelable: false }
             );
@@ -94,8 +101,8 @@ export default class Feed extends Component {
         else {
 
             let preview_image = {
-                'image_1': require("../assets/story_image_2.png"),
-                'image_2': require("../assets/story_image_1.png"),
+                'image_1': require("../assets/story_image_1.png"),
+                'image_2': require("../assets/story_image_2.png"),
                 'image_3': require("../assets/story_image_3.png"),
                 'image_4': require("../assets/story_image_4.png"),
                 'image_5': require("../assets/story_image_5.png"),

@@ -80,6 +80,13 @@ export default class StoryCard extends Component {
             return <AppLoading />
         }
         else {
+            let images = {
+                'image_1': require("../assets/story_image_1.png"),
+                'image_2': require("../assets/story_image_2.png"),
+                'image_3': require("../assets/story_image_3.png"),
+                'image_4': require("../assets/story_image_4.png"),
+                'image_5': require("../assets/story_image_5.png"),
+            }
             return (
                 <View style={this.state.light_theme ? styles.containerLight : styles.container}>
                     <SafeAreaView style={styles.droidSafeArea} />
@@ -95,7 +102,7 @@ export default class StoryCard extends Component {
                     <View style={styles.storyContainer}>
                         <ScrollView style={this.state.light_theme ? styles.storyCardLight : styles.storyCard}>
                             <Image
-                                source={require("../assets/story_image_1.png")}
+                                source={images[this.props.route.params.story.preview_image]}
                                 style={styles.image} />
                             <View style={styles.dataContainer}>
                                 <View style={styles.titleTextContainer}>
@@ -103,10 +110,10 @@ export default class StoryCard extends Component {
                                         {this.props.route.params.story.title}
                                     </Text>
                                     <Text style={this.state.light_theme ? styles.storyAuthorTextLight : styles.storyAuthorText}>
-                                        {this.props.route.params.story.author}
+                                       By : {this.props.route.params.story.author}
                                     </Text>
-                                    <Text style={this.state.light_theme ? styles.storyAuthorTextLight : styles.storyAuthorText}>
-                                        {this.props.route.params.story.created_on}
+                                    <Text style={this.state.light_theme ? styles.descriptionTextLight : styles.descriptionText}>
+                                        Date : {this.props.route.params.story.created_on}
                                     </Text>
                                 </View>
                                 <View style={styles.iconContainer}>
@@ -133,7 +140,7 @@ export default class StoryCard extends Component {
 
                             <View style={styles.storyTextContainer}>
                                 <Text style={this.state.light_theme ? styles.storyTextLight : styles.storyText}>
-                                    {this.props.route.params.story.story}
+                                    {this.props.route.params.story.story +'\n'}
                                 </Text>
                                 <Text style={this.state.light_theme ? styles.moralTextLight : styles.moralText}>
                                     Moral - {this.props.route.params.story.moral}
@@ -244,7 +251,7 @@ const styles = StyleSheet.create({
     storyAuthorTextLight: {
         fontFamily: "Bubblegum-Sans",
         fontSize: RFValue(18),
-        color: "black"
+        color: "coral"
     },
     iconContainer: {
         flex: 0.2
@@ -268,10 +275,10 @@ const styles = StyleSheet.create({
         fontSize: RFValue(20),
         color: "white"
     },
-    moralText: {
+    moralTextLight: {
         fontFamily: "Bubblegum-Sans",
         fontSize: RFValue(20),
-        color: "black"
+        color: "green"
     },
     actionContainer: {
         justifyContent: "center",
@@ -298,5 +305,17 @@ const styles = StyleSheet.create({
         fontFamily: "Bubblegum-Sans",
         fontSize: RFValue(25),
         marginLeft: RFValue(5)
+    },
+    descriptionText: {
+        fontFamily: "Bubblegum-Sans",
+        fontSize: 13,
+        color: "white",
+        paddingTop: RFValue(10)
+    },
+    descriptionTextLight: {
+        fontFamily: "Bubblegum-Sans",
+        fontSize: 13,
+        color: "black",
+        paddingTop: RFValue(10)
     },
 });
